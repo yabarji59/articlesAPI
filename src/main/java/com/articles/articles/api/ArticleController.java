@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
@@ -21,10 +20,6 @@ public class ArticleController {
 	
 	private ArticlesService service = new ArticlesService();
 	
-	@RequestMapping("/hello")
-	public String sayHello() {
-		return "Hello World";
-	}
 	/**
 	 * The first endpoint, POST /articles should handle the receipt of some 
 	 * article data in json format, and store it within the service.
@@ -33,6 +28,10 @@ public class ArticleController {
 	 */
 	@PostMapping("/articles")
 	public Article create(@Validated @RequestBody Article article) {
+		if(article == null) {
+			System.out.println("Found an error");
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
+		}
 		return service.post(article);
 	}
 	/**
