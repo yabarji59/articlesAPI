@@ -20,6 +20,11 @@ public class ArticleController {
 	
 	private ArticlesService service = new ArticlesService();
 	
+	@GetMapping("/all/") 
+	public List<Article> allArticles(){
+		return this.service.list(null, null);
+	}
+	
 	/**
 	 * The first endpoint, POST /articles should handle the receipt of some 
 	 * article data in json format, and store it within the service.
@@ -62,5 +67,19 @@ public class ArticleController {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
 		return this.service.getByTagForDate(tag, date);
+	}
+
+	/**
+	 * Retrieve articles by tag only
+	 * @param tag
+	 * @param date
+	 * @return
+	 */
+	@GetMapping("/tags/{tagName}/") 
+	public List<Article> articlesByTagOnly(@PathVariable(value = "tagName") String tag) {
+		if(tag == null) {
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
+		}
+		return this.service.getByTag(tag);
 	}
 }

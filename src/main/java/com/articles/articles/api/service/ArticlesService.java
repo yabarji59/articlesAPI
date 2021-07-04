@@ -7,23 +7,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.articles.articles.api.models.Article;
+import com.articles.articles.api.util.MockData;
 
 public class ArticlesService implements CRUD<Article> {
 	
 	private List<Article> articlesCache = new ArrayList<Article>();
+	private Logger logger = Logger.getLogger("ArticleService");
 	
-	private void p(Object o) {
-		System.out.println(o);
+	/**
+	 * Constructor to populate it with mock data
+	 * on startup
+	 */
+	public ArticlesService() {
+
+		for(Article article: MockData.mockArticles()) {
+			this.articlesCache.add(article);
+		}
 	}
+	
 	@Override
 	public Article post(Article obj) {
-		Logger.getLogger("ArticleService").log(Level.INFO, "About to create an article post");
 		if(this.articlesCache.size() > 0) {
+			//an auto-increment id hack
 			Long newId = this.articlesCache.get(this.articlesCache.size() - 1).getId();
 			newId = (newId + 1L);
 			obj.setId(newId); 
@@ -34,7 +45,9 @@ public class ArticlesService implements CRUD<Article> {
 		//return the last element inserted
 		return this.articlesCache.get((this.articlesCache.size() - 1));
 	}
-	
+	/**
+	 * @param id
+	 */
 	@Override
 	public Article get(Long id) {
 		if(this.articlesCache.size() == 0) {
@@ -46,24 +59,18 @@ public class ArticlesService implements CRUD<Article> {
 
 	/**
 	 * The final endpoint, GET /tags/{tagName}/{date} will return the list of 
-	 * articles that have that tag name on the given date and some summary data about that tag for that day.
+	 * articles that have that tag name on the given date and some summary data 
+	 * about that tag for that day.
 	 * @param tags
 	 * @param on
 	 * @return
 	 */
 	public List<Article> getByTagForDate(String tag, Date on) {
-		this.p("1");
 		List<Article> searchResult = new ArrayList<Article>();
 		LocalDate aTargetDate = this.toLocalDate(on);
-		this.p("2");
-		this.p(aTargetDate);
-		this.p(tag);
 		for(Article article: this.articlesCache) {
 			LocalDate aDate = this.toLocalDate(article.getDate());
 			//if it's on the same day
-			this.p("3");
-			this.p(aDate);
-			this.p(article);
 			if(aDate.isEqual(aTargetDate)) {
 				//then search through the tags
 				if (Arrays.asList(article.getTags()).stream().anyMatch(t -> tag.equalsIgnoreCase(t))) {
@@ -71,6 +78,15 @@ public class ArticlesService implements CRUD<Article> {
 				}
 			}
 		}
+		return searchResult;
+	}
+
+	public List<Article> getByTag(String tag) {
+		Logger.getGlobal().log(Level.INFO,"getting articles by tag");
+		//what about equals ignores case?
+		List<Article> searchResult = new ArrayList<Article>();
+		searchResult = this.articlesCache.stream().filter(t -> Arrays.asList(t.getTags()).contains(tag)).collect(Collectors.toList());
+		
 		return searchResult;
 	}
 	
@@ -91,8 +107,17 @@ public class ArticlesService implements CRUD<Article> {
 	
 	@Override
 	public List<Article> list(String filter, String sort) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<String> fOpts = Optional.ofNullable(filter);
+		Optional <String> sOpts = Optional.ofNullable(sort);
+		if(fOpts.isPresent()) {
+			//filter articles
+
+		}
+		if(sOpts.isPresent()) {
+			//sort the articles
+		}
+		Logger.getLogger("artService").log(Level.INFO, "queried all the optionals");
+		return this.articlesCache;
 	}
 
 }
