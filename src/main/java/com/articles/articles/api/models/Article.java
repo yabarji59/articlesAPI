@@ -2,9 +2,15 @@ package com.articles.articles.api.models;
 
 import java.util.Date;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Model class for the article in the following format
@@ -18,22 +24,33 @@ import lombok.Setter;
  * @author bsoni
  *
  */
-@NoArgsConstructor
-@Getter 
-@Setter
+@Entity
+@Table( name = "articles")
+@EntityListeners(AuditingEntityListener.class)
 public class Article {
-	
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name ="PDate", nullable = false)
 	private Date date;
+
+	@Column(name ="title", nullable = false)
 	private String title;
+
+	@Column(name ="body", nullable = false)
 	private String body;
-	private String[] tags;
+
+	@Column(name ="tags", nullable = false)
+	private String tags;
 	
+	public Article() {}
 	/**
 	 * relying on the Java bean pattern
 	 * a default empty constructor
 	 */
-	public Article(Long id, Date date, String body, String[] tags) {
+	public Article(Long id, Date date, String body, String tags) {
 		this.id = id;
 		this.date = date;
 		this.body = body;
@@ -65,10 +82,10 @@ public class Article {
 	}
 
 	public String[] getTags() {
-		return tags;
+		return tags.split(",");
 	}
 
-	public void setTags(String[] tags) {
+	public void setTags(String tags) {
 		this.tags = tags;
 	}
 

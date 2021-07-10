@@ -3,6 +3,7 @@ package com.articles.articles.api;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,18 +14,28 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
 import com.articles.articles.api.models.Article;
+import com.articles.articles.api.repository.ArticleRepository;
 import com.articles.articles.api.service.ArticlesService;
 
 @RestController()
 public class ArticleController {
 	
 	private ArticlesService service = new ArticlesService();
+
+
+	@Autowired
+	private ArticleRepository articleRepo;
 	
-	@GetMapping("/all/") 
+	@GetMapping("/all") 
 	public List<Article> allArticles(){
 		return this.service.list(null, null);
 	}
 	
+	@GetMapping("/all/fromDB")
+	public List<Article> getDbArticles() {
+		System.out.println(this.articleRepo);
+		return this.articleRepo.findAll();
+	}
 	/**
 	 * The first endpoint, POST /articles should handle the receipt of some 
 	 * article data in json format, and store it within the service.
@@ -37,6 +48,8 @@ public class ArticleController {
 			System.out.println("Found an error");
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
+		Article dbA = this.articleRepo.save(article);
+		System.out.print(dbA.getTitle());
 		return service.post(article);
 	}
 	/**

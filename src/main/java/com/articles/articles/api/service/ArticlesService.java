@@ -14,20 +14,23 @@ import java.util.stream.Collectors;
 
 import com.articles.articles.api.models.Article;
 import com.articles.articles.api.util.MockData;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ArticlesService implements CRUD<Article> {
-	
+
 	private List<Article> articlesCache = new ArrayList<Article>();
-	private Logger logger = Logger.getLogger("ArticleService");
-	
+
 	/**
 	 * Constructor to populate it with mock data
 	 * on startup
 	 */
 	public ArticlesService() {
 
-		for(Article article: MockData.mockArticles()) {
-			this.articlesCache.add(article);
+		if(this.articlesCache.size() == 0) {
+			for(Article article: MockData.mockArticles()) {
+				this.articlesCache.add(article);
+			}
 		}
 	}
 	

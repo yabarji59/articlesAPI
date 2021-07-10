@@ -21,16 +21,17 @@ public class MockData {
         List<Article> mockArticles = new ArrayList<Article>();
         
         Article a1 = new Article(1L, new Date(),"some text, potentially containing simple markup about how potato chips are great", 
-        new String [] {"health", "fitness", "science"});
+        new String ("health,fitness,science"));
         a1.setTitle("Latest science shows that potato chips are better for you than sugar");
 
         Article a2 = new Article(2L, new Date(),"The queen is evil, her archaic laws are bad and are destroying us", 
-        new String [] {"politics", "national", "monarchy"});
+        new String("politics,national,monarchy"));
         a2.setTitle("Queen is killing us");
 
         Article a3 = new Article(3L, new Date(),"Some sample text about fitness and stuff", 
-        new String [] {"health", "fitness", "science"});
+        new String ("health,fitness,science"));
         a3.setTitle("Potato chips aren't any better for you ");
+
 
         mockArticles.add(a1);
         mockArticles.add(a2);
