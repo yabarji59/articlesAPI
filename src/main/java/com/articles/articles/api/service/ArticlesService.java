@@ -14,9 +14,12 @@ import java.util.stream.Collectors;
 
 import com.articles.articles.api.models.Article;
 import com.articles.articles.api.util.MockData;
-import org.springframework.stereotype.Service;
 
-@Service
+/**
+ * A service class without any annotations to demonstrate
+ * a manual approach to maintaining an in-memory
+ * articles cache
+ */
 public class ArticlesService implements CRUD<Article> {
 
 	private List<Article> articlesCache = new ArrayList<Article>();
@@ -45,7 +48,6 @@ public class ArticlesService implements CRUD<Article> {
 			obj.setId(1L);
 		}
 		this.articlesCache.add(obj);
-		//return the last element inserted
 		return this.articlesCache.get((this.articlesCache.size() - 1));
 	}
 	/**
@@ -76,7 +78,7 @@ public class ArticlesService implements CRUD<Article> {
 			//if it's on the same day
 			if(aDate.isEqual(aTargetDate)) {
 				//then search through the tags
-				if (Arrays.asList(article.getTags()).stream().anyMatch(t -> tag.equalsIgnoreCase(t))) {
+				if (Arrays.asList(article.getTags().split(",")).stream().anyMatch(t -> tag.equalsIgnoreCase(t))) {
 					searchResult.add(article);
 				}
 			}
@@ -88,7 +90,7 @@ public class ArticlesService implements CRUD<Article> {
 		Logger.getGlobal().log(Level.INFO,"getting articles by tag");
 		//what about equals ignores case?
 		List<Article> searchResult = new ArrayList<Article>();
-		searchResult = this.articlesCache.stream().filter(t -> Arrays.asList(t.getTags()).contains(tag)).collect(Collectors.toList());
+		searchResult = this.articlesCache.stream().filter(t -> Arrays.asList(t.getTags().split(",")).contains(tag)).collect(Collectors.toList());
 		
 		return searchResult;
 	}

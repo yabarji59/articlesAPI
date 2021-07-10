@@ -1,7 +1,13 @@
 package com.articles.articles.api;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.articles.articles.api.models.Article;
 
@@ -12,7 +18,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -36,19 +41,39 @@ class ArticlesApplicationTests {
 	public void setUp() {
 
 	}
+
 	@Test
-	void contextLoads() {
-	}
-	
-	@Test
-	void getArticleByTag() {
+	void testGetByTag() {
 		
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		
-		//ResponseEntity<String> response = restTemplate.exchange(this.getUrl() + "/politics/Mon, 20 Jun 2021",
-		//HttpMethod.GET, entity, String.class);
-		
-		//assertFalse(response.getStatusCode() == HttpStatus.OK);
+		ResponseEntity<String> response = restTemplate.exchange(this.getUrl() + "/tag/science",
+		HttpMethod.GET, entity, String.class);
+
+		assertTrue(response.getBody().getClass() == String.class);
+	}
+
+	@Test
+	void testCreate() {
+		final String title = "Random";
+
+		Article article = new Article();
+		article.setBody("Random test article");
+		article.setTitle(title);
+		article.setDate(new Date());
+		article.setTags("random,test");
+
+		ResponseEntity<Article> responseEntity = restTemplate.postForEntity(this.getUrl() + "/articles", article, Article.class);
+		assertNotNull(responseEntity.getBody());
+		assertEquals(title, responseEntity.getBody().getTitle());
+	}
+
+	@Test
+	void testGet() {
+		ResponseEntity<Article> responseEntity = restTemplate.getForEntity(this.getUrl() + "articles/1", Article.class);
+		Article art = responseEntity.getBody();
+		assertNotNull(art);
+		assertEquals(1L, responseEntity.getBody().getId());
 	}
 }

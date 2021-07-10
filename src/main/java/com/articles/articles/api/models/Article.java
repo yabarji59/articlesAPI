@@ -50,11 +50,12 @@ public class Article {
 	 * relying on the Java bean pattern
 	 * a default empty constructor
 	 */
-	public Article(Long id, Date date, String body, String tags) {
+	public Article(Long id, Date date, String title, String body, String tags) {
 		this.id = id;
 		this.date = date;
 		this.body = body;
 		this.tags = tags;
+		this.title = title;
 	}
 
 	public Long getId() {
@@ -81,8 +82,8 @@ public class Article {
 		this.body = body;
 	}
 
-	public String[] getTags() {
-		return tags.split(",");
+	public String getTags() {
+		return tags;
 	}
 
 	public void setTags(String tags) {

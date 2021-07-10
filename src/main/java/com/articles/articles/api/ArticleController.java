@@ -2,6 +2,8 @@ package com.articles.articles.api;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +35,6 @@ public class ArticleController {
 	
 	@GetMapping("/all/fromDB")
 	public List<Article> getDbArticles() {
-		System.out.println(this.articleRepo);
 		return this.articleRepo.findAll();
 	}
 	/**
@@ -48,9 +49,17 @@ public class ArticleController {
 			System.out.println("Found an error");
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
-		Article dbA = this.articleRepo.save(article);
-		System.out.print(dbA.getTitle());
 		return service.post(article);
+	}
+
+	@PostMapping("/db/articles")
+	public Article createInDB(@Validated @RequestBody Article article) {
+		if(article == null) {
+			System.out.println("Found an error");
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
+		}
+		Article a = this.articleRepo.save(article);
+		return a;
 	}
 	/**
 	 * The second endpoint GET /articles/{id} should return the JSON representation of the article.
@@ -58,7 +67,7 @@ public class ArticleController {
 	 * @return
 	 */
 	@GetMapping("/articles/{id}")
-	public Article getArticle(@PathVariable(value = "id")Long id) {
+	public Article getArticle(@PathVariable(value = "id") Long id) {
 		
 		if(id == null) {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
@@ -88,7 +97,7 @@ public class ArticleController {
 	 * @param date
 	 * @return
 	 */
-	@GetMapping("/tags/{tagName}/") 
+	@GetMapping("/tag/{tagName}") 
 	public List<Article> articlesByTagOnly(@PathVariable(value = "tagName") String tag) {
 		if(tag == null) {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
