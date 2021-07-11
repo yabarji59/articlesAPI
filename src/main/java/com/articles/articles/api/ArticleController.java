@@ -3,7 +3,6 @@ package com.articles.articles.api;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,26 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpServerErrorException;
 
 import com.articles.articles.api.models.Article;
-import com.articles.articles.api.repository.ArticleRepository;
-import com.articles.articles.api.service.ArticlesService;
+import com.articles.articles.api.repository.ArticleRepositoryCache;
 
 @RestController()
 public class ArticleController {
 	
-	private ArticlesService service = new ArticlesService();
+	private ArticleRepositoryCache service = new ArticleRepositoryCache();
 
-
-	@Autowired
-	private ArticleRepository articleRepo;
 	
 	@GetMapping("/all") 
 	public List<Article> allArticles(){
 		return this.service.list(null, null);
-	}
-	
-	@GetMapping("/all/fromDB")
-	public List<Article> getDbArticles() {
-		return this.articleRepo.findAll();
 	}
 	/**
 	 * The first endpoint, POST /articles should handle the receipt of some 
@@ -48,16 +38,6 @@ public class ArticleController {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
 		return service.post(article);
-	}
-
-	@PostMapping("/db/articles")
-	public Article createInDB(@Validated @RequestBody Article article) {
-		if(article == null) {
-			System.out.println("Found an error");
-			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
-		}
-		Article a = this.articleRepo.save(article);
-		return a;
 	}
 	/**
 	 * The second endpoint GET /articles/{id} should return the JSON representation of the article.
@@ -81,7 +61,7 @@ public class ArticleController {
 	 * @param date
 	 * @return
 	 */
-	@GetMapping("/tags/{tagName}/{date}") 
+	@GetMapping("/tag/{tagName}/{date}") 
 	public List<Article> articlesByTag(@PathVariable(value = "tagName") String tag, @PathVariable(value = "date") Date date) {
 		if(tag == null || date == null) {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
