@@ -1,3 +1,5 @@
+package com.articles.articles.repository;
+
 import com.articles.articles.api.models.Article;
 
 import org.springframework.data.jpa.repository.JpaRepository;

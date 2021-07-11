@@ -2,8 +2,6 @@ package com.articles.articles.api;
 
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,7 +70,7 @@ public class ArticleController {
 		if(id == null) {
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST);
 		}
-		Article article = service.get(id);
+		Article article = this.service.get(id);
 		return article;
 	}
 	/**

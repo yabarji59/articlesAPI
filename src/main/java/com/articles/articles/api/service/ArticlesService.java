@@ -121,7 +121,6 @@ public class ArticlesService implements CRUD<Article> {
 		if(sOpts.isPresent()) {
 			//sort the articles
 		}
-		Logger.getLogger("artService").log(Level.INFO, "queried all the optionals");
 		return this.articlesCache;
 	}
 
