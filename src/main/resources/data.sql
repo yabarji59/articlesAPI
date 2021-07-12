@@ -26,7 +26,5 @@ INSERT INTO billionaires (first_name, last_name, career) VALUES
 INSERT INTO articles (pDate, title, body, tags) VALUES
 ('2021-07-07', 'Queen Bee', 'Lots and lots of queen bees in nature', 'nature,science,animals'),
 ('2021-07-06', 'CW Longbottom', 'Literally genius - is he or is he not?', 'author,fiction,books'),
-('2021-07-05', 'Polar Bear', 'The king or queen of the artic!!!', 'nature,winter,animals'),
-('2021-07-04', 'Issac Assimov', 'True genius - best sci-fi author', 'author,sci-fi,books');
-
+('2021-07-05', 'Polar Bear', 'The king or queen of the artic!!!', 'nature,winter,animals');
 
