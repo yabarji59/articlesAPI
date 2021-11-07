@@ -50,9 +50,13 @@ If you want to improve the code by making changes to it, then either import it a
 
 > To be added...
 
-# More tutorials?
-For more tutorials, how-to articles and general problem solving, have a read of [My Day To-Do Blog].
+# More great tutorials and code samples
+Checkout [this blog] for more "how-to" code samples, tutorials and just info on how to solve problems.
 
+Click on the next link for more info on the 13+ year [software engineering career journey] of the author.
+
+[software engineering career journey]: https://mydaytodo.com/the-3-stages-of-a-software-engineering-career/
+[this blog]: https://mydaytodo.com/blog/
 [Java 11]: https://www.oracle.com/au/java/technologies/javase-jdk11-downloads.html
 [Maven]: https://maven.apache.org/
 [VS Code]: https://code.visualstudio.com/
